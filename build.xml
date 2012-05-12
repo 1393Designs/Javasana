@@ -1,0 +1,66 @@
+<project name="Javasana" basedir="." default="help">
+	<property name="src.dir"     value="src"/>
+	<property name="lib.dir"     value="lib"/>
+
+	<property name="build.dir"   value="bin"/>
+	<property name="test.dir"    value="${build.dir}/test"/>
+	<property name="classes.dir" value="${build.dir}/classes"/>
+	<property name="jar.dir"     value="${build.dir}/jar"/>
+
+	<property name="main-class"         value="JavasanaTest"/>
+	<property name="library-name-core"  value="com.designs_1393.javasana.core"/>
+
+	<path id="classpath">
+		<fileset dir="${lib.dir}" includes="**/*.jar"/>
+	</path>
+
+	<path id="javasana_classpath">
+		<fileset dir="${lib.dir}" includes="**/*.jar"/>
+		<fileset dir="${jar.dir}" includes="**/*.jar"/>
+	</path>
+
+	<target name="clean">
+		<delete dir="${build.dir}" />
+	</target>
+
+	<target name="lib_classes">
+		<mkdir dir="${classes.dir}" />
+		<javac srcdir="src" classpathref="classpath" destdir="${classes.dir}"
+			includeantruntime="false"/>
+	</target>
+
+	<target name="lib" depends="lib_classes">
+		<mkdir dir="${jar.dir}" />
+		<jar destfile="${jar.dir}/javasana_core.jar" basedir="${classes.dir}" />
+	</target>
+
+	<target name="compile">
+		<mkdir dir="${test.dir}" />
+		<javac srcdir="test" classpathref="javasana_classpath" destdir="${test.dir}" includeantruntime="false"/>
+	</target>
+
+	<target name="run" depends="compile">
+		<java classname="${main-class}" classpath="${test.dir}">
+			<classpath>
+				<path refid="javasana_classpath"/>
+			</classpath>
+		</java>
+	</target>
+
+	<target name="doc">
+		<echo>This will eventually build the javadoc.</echo>
+	</target>
+
+	<target name="help">
+		<!-- displays start at col 13
+              |13                                                              80| -->
+		<echo>QuestionEngine Ant build.  Available targets:</echo>
+		<echo>    help:        Displays this help.</echo>
+		<echo>    clean:       Removes output files created by other targets.</echo>
+		<echo>    lib_classes: Builds the .classes files for the library.</echo>
+		<echo>    lib:         Builds a .jar out of the .class files.</echo>
+		<echo>    compile:     Builds the test application.</echo>
+		<echo>    run:         Runs the test application.</echo>
+		<echo>    doc:         Builds the javadoc for this project.</echo>
+	</target>
+</project>
